@@ -2,10 +2,20 @@
 
 const { rebuildDB } = require("./seedData");
 const { createUser, getUser, getUserById } = require("./users");
+const {
+  createActivity,
+  getAllActivities,
+  getActivityById,
+  updateActivity,
+} = require("./activities");
 
 module.exports = {
   rebuildDB,
   createUser,
   getUser,
   getUserById,
+  createActivity,
+  getAllActivities,
+  getActivityById,
+  updateActivity,
 };
