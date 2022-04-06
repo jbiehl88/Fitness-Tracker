@@ -7,9 +7,12 @@ const {
   getAllActivities,
   getActivityById,
   updateActivity,
+  attachActivitiesToRoutines,
 } = require("./activities");
 
 const { createRoutine, getAllRoutines } = require("./routines");
+
+const { addActivityToRoutine } = require("./routine_activities");
 
 module.exports = {
   rebuildDB,
@@ -20,6 +23,8 @@ module.exports = {
   getAllActivities,
   getActivityById,
   updateActivity,
+  attachActivitiesToRoutines,
   createRoutine,
   getAllRoutines,
+  addActivityToRoutine,
 };
