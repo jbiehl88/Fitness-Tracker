@@ -28,16 +28,34 @@ async function getUser({ username, password }) {
       `
         SELECT *
         FROM users
-        WHERE username = ${username}
-        AND password = ${password};
+        WHERE username = $1
 `,
-      [username, password]
+      [username]
     );
-    console.log("Phil wants a string", user);
+    if (user.password !== password) {
+      return null;
+    }
+    delete user.password;
     return user;
   } catch (error) {
     throw error;
   }
 }
-
-module.exports = { createUser, getUser };
+async function getUserById(userId) {
+  try {
+    const {
+      rows: [user],
+    } = await client.query(
+      `SELECT id, username 
+        FROM users WHERE id=${userId};
+      `
+    );
+    if (!user) {
+      return null;
+    }
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
+module.exports = { createUser, getUser, getUserById };
