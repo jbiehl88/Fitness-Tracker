@@ -2,7 +2,7 @@
 // const { } = require('./');
 
 const { client } = require("./client");
-const { createUser } = require("./");
+const { createUser, createActivity } = require("./");
 
 async function dropTables() {
   try {
@@ -235,7 +235,7 @@ async function rebuildDB() {
     await dropTables();
     await createTables();
     await createInitialUsers();
-    // await createInitialActivities();
+    await createInitialActivities();
     // await createInitialRoutines();
     // await createInitialRoutineActivities();
   } catch (error) {
