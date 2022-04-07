@@ -35,31 +35,28 @@ async function getAllRoutines() {
   }
 }
 
-// async function getRoutineById(routineId) {
-//   console.log("ById Params", routineId);
-//   try {
-//     const {
-//       rows: [routine],
-//     } = await client.query(
-//       `
-//     SELECT *
-//     FROM routines
-//     WHERE id=$1;
-//   `,
-//       [routineId]
-//     );
+async function getRoutineById(routineId) {
+  // console.log("ById Params", routineId);
+  try {
+    const {
+      rows: [routine],
+    } = await client.query(
+      `
+    SELECT *
+    FROM routines
+    WHERE id=$1;
+  `,
+      [routineId]
+    );
 
-//     if (!routine) {
-//       throw {
-//         name: "RoutineNotFoundError",
-//         message: "Could not find a routine with that routineId",
-//       };
-//     }
-//     return routine;
-//   } catch (error) {
-//     throw error;
-//   }
-// }
+    if (!routine) {
+      return null;
+    }
+    return routine;
+  } catch (error) {
+    throw error;
+  }
+}
 
 async function getRoutinesWithoutActivities() {
   try {
@@ -134,8 +131,52 @@ async function getPublicRoutinesByActivity(activity) {
       `,
       [activity.id]
     );
-    console.log("RoutinesByActivity", routines);
+    // console.log("RoutinesByActivity", routines);
     return attachActivitiesToRoutines(routines);
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function updateRoutine({ id, ...fields }) {
+  const setString = Object.keys(fields)
+    .map((key, index) => `"${key}"=$${index + 1}`)
+    .join(", ");
+
+  try {
+    if (setString.length > 0) {
+      await client.query(
+        `
+        UPDATE routines
+        SET ${setString}
+        WHERE id=${id}
+        RETURNING *;
+      `,
+        Object.values(fields)
+      );
+    }
+    return await getRoutineById(id);
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function destroyRoutine(routineId) {
+  try {
+    await client.query(
+      `
+    DELETE FROM routine_activities
+    WHERE "routineId" = $1;
+    `,
+      [routineId]
+    );
+    await client.query(
+      `
+    DELETE FROM routines
+    WHERE id = $1;
+    `,
+      [routineId]
+    );
   } catch (error) {
     throw error;
   }
@@ -149,4 +190,7 @@ module.exports = {
   getAllRoutinesByUser,
   getPublicRoutinesByUser,
   getPublicRoutinesByActivity,
+  getRoutineById,
+  updateRoutine,
+  destroyRoutine,
 };
