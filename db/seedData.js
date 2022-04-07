@@ -2,7 +2,14 @@
 // const { } = require('./');
 
 const { client } = require("./client");
-const { createUser, createActivity, createRoutine } = require("./");
+const {
+  createUser,
+  createActivity,
+  createRoutine,
+  getAllActivities,
+  getRoutinesWithoutActivities,
+  addActivityToRoutine,
+} = require("./");
 
 async function dropTables() {
   try {
@@ -49,7 +56,8 @@ async function createTables() {
       "routineId" INTEGER REFERENCES routines(id),
       "activityId" INTEGER REFERENCES activities(id),
       duration INTEGER,
-      count INTEGER
+      count INTEGER,
+      UNIQUE ("routineId", "activityId")
     );
   `);
 }
@@ -237,7 +245,7 @@ async function rebuildDB() {
     await createInitialUsers();
     await createInitialActivities();
     await createInitialRoutines();
-    // await createInitialRoutineActivities();
+    await createInitialRoutineActivities();
   } catch (error) {
     console.log("Error during rebuildDB");
     throw error;

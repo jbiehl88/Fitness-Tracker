@@ -122,7 +122,6 @@ async function attachActivitiesToRoutines(routines) {
       // attach the activities to each single routine
       routine.activities = activitiesToAdd;
     }
-    console.log(routinesToReturn);
     return routinesToReturn;
   } catch (error) {
     throw error;
