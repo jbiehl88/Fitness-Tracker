@@ -18,9 +18,18 @@ const {
   getAllRoutinesByUser,
   getPublicRoutinesByUser,
   getPublicRoutinesByActivity,
+  getRoutineById,
+  updateRoutine,
+  destroyRoutine,
 } = require("./routines");
 
-const { addActivityToRoutine } = require("./routine_activities");
+const {
+  addActivityToRoutine,
+  getRoutineActivitiesByRoutine,
+  updateRoutineActivity,
+  getRoutineActivityById,
+  destroyRoutineActivity,
+} = require("./routine_activities");
 
 module.exports = {
   rebuildDB,
@@ -40,4 +49,11 @@ module.exports = {
   getAllRoutinesByUser,
   getPublicRoutinesByUser,
   getPublicRoutinesByActivity,
+  getRoutineById,
+  updateRoutine,
+  destroyRoutine,
+  getRoutineActivitiesByRoutine,
+  updateRoutineActivity,
+  getRoutineActivityById,
+  destroyRoutineActivity,
 };
