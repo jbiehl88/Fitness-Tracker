@@ -1,7 +1,12 @@
 // require and re-export all files in this db directory (users, activities...)
 
 const { rebuildDB } = require("./seedData");
-const { createUser, getUser, getUserById } = require("./users");
+const {
+  createUser,
+  getUser,
+  getUserByUserName,
+  getUserById,
+} = require("./users");
 const {
   createActivity,
   getAllActivities,
@@ -35,6 +40,7 @@ module.exports = {
   rebuildDB,
   createUser,
   getUser,
+  getUserByUserName,
   getUserById,
   createActivity,
   getAllActivities,
