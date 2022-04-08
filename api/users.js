@@ -1,5 +1,9 @@
 const express = require("express");
-const { getUserByUserName, createUser } = require("../db");
+const {
+  getUserByUserName,
+  createUser,
+  getPublicRoutinesByUser,
+} = require("../db");
 const usersRouter = express.Router();
 
 usersRouter.post("/register", async (req, res, next) => {
@@ -57,15 +61,15 @@ usersRouter.post("/login", async (req, res, next) => {
   }
 
   try {
-    const user = await getUserByUsername(username);
+    const user = await getUserByUsername({ username });
 
     if (user && user.password == password) {
-      const token = jwt.sign(
-        { id: user.id, username },
-        {
-          expiresIn: "1w",
-        }
-      );
+      //   const token = jwt.sign(
+      //     { id: user.id, username },
+      //     {
+      //       expiresIn: "1w",
+      //     }
+      //   );
       res.send({ message: "you're logged in!", token });
     } else {
       next({
@@ -76,6 +80,20 @@ usersRouter.post("/login", async (req, res, next) => {
     }
   } catch (error) {
     console.log(error);
+    next(error);
+  }
+});
+
+// needs work - returning empty array -Jordan
+usersRouter.get("/:username/routines", async (req, res, next) => {
+  try {
+    const routines = await getPublicRoutinesByUser(
+      req.params.username,
+      req.body
+    );
+    console.log("jordan", routines);
+    res.send({ routines });
+  } catch (error) {
     next(error);
   }
 });
