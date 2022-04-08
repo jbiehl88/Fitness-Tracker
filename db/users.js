@@ -41,6 +41,26 @@ async function getUser({ username, password }) {
     throw error;
   }
 }
+
+async function getUserByUserName({ username }) {
+  try {
+    const { rows } = await client.query(
+      `
+        SELECT *
+        FROM users
+        WHERE username = $1
+`,
+      [username]
+    );
+    if (!rows || !rows.length) {
+      return null;
+    }
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function getUserById(userId) {
   try {
     const {
@@ -58,4 +78,4 @@ async function getUserById(userId) {
     throw error;
   }
 }
-module.exports = { createUser, getUser, getUserById };
+module.exports = { createUser, getUser, getUserByUserName, getUserById };

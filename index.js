@@ -13,6 +13,8 @@ server.use(cors());
 
 server.use(express.json());
 
+server.use(express.urlencoded({ extended: true }));
+
 server.use("/api", apiRouter);
 
 server.listen(PORT, () => {

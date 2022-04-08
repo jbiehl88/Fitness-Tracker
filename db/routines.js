@@ -28,7 +28,6 @@ async function getAllRoutines() {
         JOIN users ON routines."creatorId"=users.id;
     `
     );
-    // console.log("Phil needs a title", rows);
     return attachActivitiesToRoutines(rows);
   } catch (error) {
     throw error;
