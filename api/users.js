@@ -32,17 +32,16 @@ usersRouter.post("/register", async (req, res, next) => {
       password,
     });
 
-    //   const token = jwt.sign(
-    //     {
-    //       id: user.id,
-    //       username,
-    //     },
-    //     process.env.JWT_SECRET,
-    //     {
-    //       expiresIn: "1w",
-    //     }
-    //   );
-
+    // const token = jwt.sign(
+    //   {
+    //     id: user.id,
+    //     username,
+    //   },
+    //   process.env.JWT_SECRET,
+    //   {
+    //     expiresIn: "1w",
+    //   }
+    // );
     res.send({ user });
   } catch ({ name, message }) {
     next({ name, message });
@@ -64,12 +63,7 @@ usersRouter.post("/login", async (req, res, next) => {
     const user = await getUserByUsername({ username });
 
     if (user && user.password == password) {
-      //   const token = jwt.sign(
-      //     { id: user.id, username },
-      //     {
-      //       expiresIn: "1w",
-      //     }
-      //   );
+      const token = jwt.sign({ id: user.id, username }, JWT_SECRET);
       res.send({ message: "you're logged in!", token });
     } else {
       next({
