@@ -111,6 +111,7 @@ describe("API", () => {
           `${API_URL}/api/users/login`,
           newUser
         );
+
         token = data.token;
         expect(data.token).toBeTruthy();
       });
