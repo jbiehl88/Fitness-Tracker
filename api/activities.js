@@ -6,7 +6,7 @@ const {
   updateActivity,
   getPublicRoutinesByActivity,
 } = require("../db");
-// const { requireUser } = require("./utils");
+const { requireUser } = require("./utils");
 
 activitiesRouter.get("/", async (req, res, next) => {
   try {
@@ -18,21 +18,18 @@ activitiesRouter.get("/", async (req, res, next) => {
 });
 
 //needs requireUser (logged-in) to post but it is working (passing)- Jordan
-activitiesRouter.post(
-  "/",
-  /*requireUser,*/ async (req, res, next) => {
-    const { name, description } = req.body;
-    const activityData = {};
-    try {
-      activityData.name = name;
-      activityData.description = description;
-      const newActivity = await createActivity({ name, description });
-      res.send(newActivity);
-    } catch (error) {
-      next(error);
-    }
+activitiesRouter.post("/", requireUser, async (req, res, next) => {
+  const { name, description } = req.body;
+  const activityData = {};
+  try {
+    activityData.name = name;
+    activityData.description = description;
+    const newActivity = await createActivity({ name, description });
+    res.send(newActivity);
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 // needs user token - not working yet - Jordan
 // activitiesRouter.patch(

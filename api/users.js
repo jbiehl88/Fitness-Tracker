@@ -4,6 +4,7 @@ const {
   createUser,
   getPublicRoutinesByUser,
 } = require("../db");
+const jwt = require("jsonwebtoken");
 const usersRouter = express.Router();
 
 usersRouter.post("/register", async (req, res, next) => {
@@ -32,18 +33,17 @@ usersRouter.post("/register", async (req, res, next) => {
       password,
     });
 
-    //   const token = jwt.sign(
-    //     {
-    //       id: user.id,
-    //       username,
-    //     },
-    //     process.env.JWT_SECRET,
-    //     {
-    //       expiresIn: "1w",
-    //     }
-    //   );
-
-    res.send({ user });
+    const token = jwt.sign(
+      {
+        id: user.id,
+        username,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1w",
+      }
+    );
+    res.send({ user, token });
   } catch ({ name, message }) {
     next({ name, message });
   }
@@ -52,6 +52,7 @@ usersRouter.post("/register", async (req, res, next) => {
 usersRouter.post("/login", async (req, res, next) => {
   const { username, password } = req.body;
 
+  console.log("hello world");
   if (!username || !password) {
     next({
       name: "MissingCredentialsError",
@@ -61,15 +62,11 @@ usersRouter.post("/login", async (req, res, next) => {
   }
 
   try {
-    const user = await getUserByUsername({ username });
+    const user = await getUserByUserName({ username });
 
     if (user && user.password == password) {
-      //   const token = jwt.sign(
-      //     { id: user.id, username },
-      //     {
-      //       expiresIn: "1w",
-      //     }
-      //   );
+      const token = jwt.sign({ id: user.id, username }, process.env.JWT_SECRET);
+      console.log("Tag for Pawan", token);
       res.send({ message: "you're logged in!", token });
     } else {
       next({
