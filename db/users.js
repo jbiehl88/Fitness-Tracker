@@ -42,7 +42,7 @@ async function getUser({ username, password }) {
   }
 }
 
-async function getUserByUserName({ username }) {
+async function getUserByUsername({ username }) {
   try {
     const { rows } = await client.query(
       `
@@ -55,6 +55,7 @@ async function getUserByUserName({ username }) {
     if (!rows || !rows.length) {
       return null;
     }
+    console.log("User: ", rows[0]);
     return rows[0];
   } catch (error) {
     throw error;
@@ -78,4 +79,4 @@ async function getUserById(userId) {
     throw error;
   }
 }
-module.exports = { createUser, getUser, getUserByUserName, getUserById };
+module.exports = { createUser, getUser, getUserByUsername, getUserById };

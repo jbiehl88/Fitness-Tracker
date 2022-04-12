@@ -1,11 +1,11 @@
 const express = require("express");
-const { getUserByUserName, createUser } = require("../db");
+const { getUserByUsername, createUser } = require("../db");
 const usersRouter = express.Router();
 
 usersRouter.post("/register", async (req, res, next) => {
   try {
     const { username, password } = req.body;
-    const _user = await getUserByUserName({ username });
+    const _user = await getUserByUsername({ username });
     if (_user) {
       res.status(401);
       next({

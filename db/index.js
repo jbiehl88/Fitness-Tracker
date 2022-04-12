@@ -4,7 +4,7 @@ const { rebuildDB } = require("./seedData");
 const {
   createUser,
   getUser,
-  getUserByUserName,
+  getUserByUsername,
   getUserById,
 } = require("./users");
 const {
@@ -40,7 +40,7 @@ module.exports = {
   rebuildDB,
   createUser,
   getUser,
-  getUserByUserName,
+  getUserByUsername,
   getUserById,
   createActivity,
   getAllActivities,
