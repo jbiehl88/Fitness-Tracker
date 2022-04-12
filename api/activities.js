@@ -30,12 +30,11 @@ activitiesRouter.post("/", requireUser, async (req, res, next) => {
   }
 });
 
-//   not working yet - Jordan
 activitiesRouter.patch("/:activityId", requireUser, async (req, res, next) => {
   const { activityId } = req.params;
-  // console.log("activityID", activityId);
+
   const { name, description } = req.body;
-  // console.log("fields", name, description);
+
   const updateFields = {};
 
   if (name) {
@@ -44,10 +43,9 @@ activitiesRouter.patch("/:activityId", requireUser, async (req, res, next) => {
   if (description) {
     updateFields.description = description;
   }
-  // console.log("Fields", updateFields);
+
   try {
     const updatedActivity = await updateActivity(activityId, updateFields);
-    console.log("checking test", updateActivity);
     res.send(updatedActivity);
   } catch (error) {
     next(error);
@@ -57,7 +55,10 @@ activitiesRouter.patch("/:activityId", requireUser, async (req, res, next) => {
 //needs work - returning empty object -- Jordan
 activitiesRouter.get("/:activityId/routines", async (req, res, next) => {
   try {
-    const activityById = getPublicRoutinesByActivity(req.params.activityId);
+    const activityById = await getPublicRoutinesByActivity({
+      id: req.params.activityId,
+    });
+
     res.send(activityById);
   } catch (error) {
     next(error);

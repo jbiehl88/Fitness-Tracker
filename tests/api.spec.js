@@ -201,7 +201,6 @@ describe("API", () => {
           newActivityData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        console.log(respondedActivity);
         expect(respondedActivity.name).toEqual(newActivityData.name);
         expect(respondedActivity.description).toEqual(
           newActivityData.description
@@ -334,7 +333,7 @@ describe("API", () => {
       });
     });
   });
-  xdescribe("routine_activities", () => {
+  describe("routine_activities", () => {
     let newRoutineActivityData = {
       routineId: 3,
       activityId: 8,
@@ -348,6 +347,7 @@ describe("API", () => {
           newRoutineActivityData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
+        console.log("Pawan", respondedRoutineActivity);
         expect(respondedRoutineActivity.count).toEqual(
           newRoutineActivityData.count
         );
@@ -356,7 +356,7 @@ describe("API", () => {
         );
         routineActivityToCreateAndUpdate = respondedRoutineActivity;
       });
-      it("Logged in user should be the owner of the modified object.", async () => {
+      xit("Logged in user should be the owner of the modified object.", async () => {
         let respondedRoutineActivity, errRespondedRoutineActivity;
         try {
           respondedRoutineActivity = await axios.patch(
@@ -371,7 +371,7 @@ describe("API", () => {
         expect(errRespondedRoutineActivity.data).toBeTruthy();
       });
     });
-    describe("DELETE /routine_activities/:routineActivityId (**)", () => {
+    xdescribe("DELETE /routine_activities/:routineActivityId (**)", () => {
       it("Removes an activity from a routine, uses hard delete", async () => {
         const { data: deletedRoutineActivity } = await axios.delete(
           `${API_URL}/api/routine_activities/${routineActivityToCreateAndUpdate.id}`,
