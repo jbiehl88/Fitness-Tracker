@@ -17,7 +17,6 @@ activitiesRouter.get("/", async (req, res, next) => {
   }
 });
 
-//needs requireUser (logged-in) to post but it is working (passing)- Jordan
 activitiesRouter.post("/", requireUser, async (req, res, next) => {
   const { name, description } = req.body;
   const activityData = {};
@@ -31,28 +30,29 @@ activitiesRouter.post("/", requireUser, async (req, res, next) => {
   }
 });
 
-// needs user token - not working yet - Jordan
-// activitiesRouter.patch(
-//   "/:activityId",
-//   /*requireUser,*/ async (req, res, next) => {
-//     const { activityId } = req.params;
-//     const { name, description } = req.body;
-//     const updateFields = {};
+//   not working yet - Jordan
+activitiesRouter.patch("/:activityId", requireUser, async (req, res, next) => {
+  const { activityId } = req.params;
+  // console.log("activityID", activityId);
+  const { name, description } = req.body;
+  // console.log("fields", name, description);
+  const updateFields = {};
 
-//     if (name) {
-//       updateFields.name = name;
-//     }
-//     if (description) {
-//       updateFields.description = description;
-//     }
-//     try {
-//       const updatedActivity = updateActivity(activityId, updateFields);
-//       res.send(updatedActivity);
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
-// );
+  if (name) {
+    updateFields.name = name;
+  }
+  if (description) {
+    updateFields.description = description;
+  }
+  // console.log("Fields", updateFields);
+  try {
+    const updatedActivity = await updateActivity(activityId, updateFields);
+    console.log("checking test", updateActivity);
+    res.send(updatedActivity);
+  } catch (error) {
+    next(error);
+  }
+});
 
 //needs work - returning empty object -- Jordan
 activitiesRouter.get("/:activityId/routines", async (req, res, next) => {

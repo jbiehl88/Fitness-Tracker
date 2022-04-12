@@ -190,7 +190,7 @@ describe("API", () => {
         activityToCreateAndUpdate = respondedActivity;
       });
     });
-    xdescribe("PATCH /activities/:activityId (*)", () => {
+    describe("PATCH /activities/:activityId (*)", () => {
       it("Anyone can update an activity (yes, this could lead to long term problems a la wikipedia)", async () => {
         const newActivityData = {
           name: "Double Bicep Curls",
@@ -201,13 +201,14 @@ describe("API", () => {
           newActivityData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
+        console.log(respondedActivity);
         expect(respondedActivity.name).toEqual(newActivityData.name);
         expect(respondedActivity.description).toEqual(
           newActivityData.description
         );
       });
     });
-    xdescribe("GET /activities/:activityId/routines", () => {
+    describe("GET /activities/:activityId/routines", () => {
       it("Get a list of all public routines which feature that activity", async () => {
         const [testRoutine] = await getAllPublicRoutines();
         const [testActivity] = testRoutine.activities;
