@@ -245,7 +245,7 @@ describe("API", () => {
       });
     });
 
-    xdescribe("POST /routines (*)", () => {
+    describe("POST /routines (*)", () => {
       it("Creates a new routine, with the creatorId matching the logged in user", async () => {
         const { data: respondedRoutine } = await axios.post(
           `${API_URL}/api/routines`,
@@ -273,19 +273,20 @@ describe("API", () => {
         expect(noLoggedInUserErrResp.data).toBeTruthy();
       });
     });
-    xdescribe("PATCH /routines/:routineId (**)", () => {
+    describe("PATCH /routines/:routineId (**)", () => {
       it("Updates a routine, notably changing public/private, the name, or the goal", async () => {
         const { data: respondedRoutine } = await axios.patch(
           `${API_URL}/api/routines/${routineToCreateAndUpdate.id}`,
           newRoutineData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
+        console.log(respondedRoutine);
         expect(respondedRoutine.name).toEqual(newRoutineData.name);
         expect(respondedRoutine.goal).toEqual(newRoutineData.goal);
         routineToCreateAndUpdate = respondedRoutine;
       });
     });
-    xdescribe("DELETE /routines/:routineId (**)", () => {
+    describe("DELETE /routines/:routineId (**)", () => {
       it("Hard deletes a routine. Makes sure to delete all the routineActivities whose routine is the one being deleted.", async () => {
         const { data: deletedRoutine } = await axios.delete(
           `${API_URL}/api/routines/${routineToCreateAndUpdate.id}`,
@@ -298,7 +299,7 @@ describe("API", () => {
         expect(shouldBeDeleted).toBeFalsy();
       });
     });
-    xdescribe("POST /routines/:routineId/activities", () => {
+    describe("POST /routines/:routineId/activities", () => {
       let newRoutine;
       it("Attaches a single activity to a routine.", async () => {
         newRoutine = await createRoutine({
@@ -342,6 +343,7 @@ describe("API", () => {
     };
     describe("PATCH /routine_activities/:routineActivityId (**)", () => {
       it("Updates the count or duration on the routine activity", async () => {
+        console.log(routineActivityToCreateAndUpdate);
         const { data: respondedRoutineActivity } = await axios.patch(
           `${API_URL}/api/routine_activities/${routineActivityToCreateAndUpdate.id}`,
           newRoutineActivityData,
