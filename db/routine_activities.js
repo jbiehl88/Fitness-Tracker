@@ -82,7 +82,7 @@ async function getRoutineActivityById(routineActivityId) {
 //   }
 // }
 
-async function updateRoutineActivity(id, { ...fields }) {
+async function updateRoutineActivity(id, fields) {
   try {
     const toUpdate = {};
     for (let column in fields) {
@@ -90,6 +90,9 @@ async function updateRoutineActivity(id, { ...fields }) {
     }
     let routineActivity;
     if (dbFields(fields).insert.length > 0) {
+      console.log(dbFields(toUpdate).insert);
+      console.log("Testing123", Object.values(toUpdate));
+      console.log(id);
       const { rows } = await client.query(
         `
         UPDATE routine_activities
@@ -99,6 +102,7 @@ async function updateRoutineActivity(id, { ...fields }) {
       `,
         Object.values(toUpdate)
       );
+      console.log("Testing", rows);
       routineActivity = rows[0];
       return routineActivity;
     }
