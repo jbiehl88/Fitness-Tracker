@@ -1,6 +1,9 @@
 const express = require("express");
 const routine_activitiesRouter = express.Router();
-const { updateRoutineActivity, destroyRoutineActivity } = require("../db");
+const {
+  updateRoutineActivity,
+  destroyRoutineActivity,
+} = require("../db/routine_activities");
 const { requireUser } = require("./utils");
 
 //needs work -- not returning (prob due to needing to log in) -- Jordan
@@ -9,7 +12,8 @@ routine_activitiesRouter.patch(
   requireUser,
   async (req, res, next) => {
     const { routineActivityId } = req.params;
-    // console.log(routineActivityId)
+
+    // console.log("ID tester", routineActivityId);
     const { count, duration } = req.body;
 
     const updateFields = {};
@@ -21,7 +25,7 @@ routine_activitiesRouter.patch(
       updateFields.duration = duration;
     }
     try {
-      console.log("Jordan", updateFields);
+      // console.log("Jordan", updateFields);
       const updatedRA = await updateRoutineActivity(
         routineActivityId,
         updateFields

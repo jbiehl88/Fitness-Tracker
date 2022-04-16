@@ -137,11 +137,10 @@ async function getPublicRoutinesByActivity(activity) {
   }
 }
 
-async function updateRoutine({ id, ...fields }) {
+async function updateRoutine({ id, fields }) {
   const setString = Object.keys(fields)
     .map((key, index) => `"${key}"=$${index + 1}`)
     .join(", ");
-
   try {
     if (setString.length > 0) {
       await client.query(
@@ -162,6 +161,8 @@ async function updateRoutine({ id, ...fields }) {
 
 async function destroyRoutine(routineId) {
   try {
+    console.log(routineId);
+
     await client.query(
       `
     DELETE FROM routine_activities
@@ -169,13 +170,17 @@ async function destroyRoutine(routineId) {
     `,
       [routineId]
     );
-    await client.query(
+    const {
+      rows: [routine],
+    } = await client.query(
       `
     DELETE FROM routines
-    WHERE id = $1;
+    WHERE id = $1
+    RETURNING *;
     `,
       [routineId]
     );
+    return routine;
   } catch (error) {
     throw error;
   }
