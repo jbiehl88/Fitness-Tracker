@@ -20,6 +20,9 @@ async function addActivityToRoutine({
         `,
       [routineId, activityId, duration, count]
     );
+    if (!routineActivity) {
+      return null;
+    }
     return routineActivity;
   } catch (error) {
     throw error;

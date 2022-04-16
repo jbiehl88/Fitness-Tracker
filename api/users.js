@@ -79,14 +79,13 @@ usersRouter.post("/login", async (req, res, next) => {
   }
 });
 
-// needs work - returning empty array -Jordan
 usersRouter.get("/:username/routines", async (req, res, next) => {
   try {
     const routines = await getPublicRoutinesByUser(
       req.params.username,
       req.body
     );
-    console.log("jordan", routines);
+
     res.send({ routines });
   } catch (error) {
     next(error);

@@ -5,7 +5,10 @@ const {
   createRoutine,
   updateRoutine,
   destroyRoutine,
-} = require("../db/routines");
+  addActivityToRoutine,
+  getRoutineActivitiesByRoutine,
+  getRoutineById,
+} = require("../db/");
 const { requireUser } = require("./utils");
 
 routinesRouter.get("/", async (req, res, next) => {
@@ -43,5 +46,35 @@ routinesRouter.patch("/:routineId", requireUser, async (req, res, next) => {
     next(error);
   }
 });
+
+routinesRouter.delete("/:routineId", requireUser, async (req, res, next) => {
+  try {
+    const { routineId } = req.params;
+    const routineDelete = await destroyRoutine(routineId);
+    res.send(routineDelete);
+  } catch (error) {
+    next(error);
+  }
+});
+
+routinesRouter.post(
+  "/:routineId/activities",
+  requireUser,
+  async (req, res, next) => {
+    try {
+      const { routineId } = req.params;
+      const { activityId, duration, count } = req.body;
+      const routine = await addActivityToRoutine({
+        routineId,
+        activityId,
+        duration,
+        count,
+      });
+      res.send(routine);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = routinesRouter;
