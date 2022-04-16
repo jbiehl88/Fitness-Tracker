@@ -343,12 +343,13 @@ describe("API", () => {
     };
     describe("PATCH /routine_activities/:routineActivityId (**)", () => {
       it("Updates the count or duration on the routine activity", async () => {
-        console.log(routineActivityToCreateAndUpdate);
+        console.log("hello", routineActivityToCreateAndUpdate);
         const { data: respondedRoutineActivity } = await axios.patch(
           `${API_URL}/api/routine_activities/${routineActivityToCreateAndUpdate.id}`,
           newRoutineActivityData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
+
         console.log("Pawan", respondedRoutineActivity);
         expect(respondedRoutineActivity.count).toEqual(
           newRoutineActivityData.count

@@ -137,11 +137,12 @@ async function getPublicRoutinesByActivity(activity) {
   }
 }
 
-async function updateRoutine({ id, ...fields }) {
+async function updateRoutine({ id, fields }) {
+  console.log("testin111", id);
+  console.log("testing2222", fields);
   const setString = Object.keys(fields)
     .map((key, index) => `"${key}"=$${index + 1}`)
     .join(", ");
-
   try {
     if (setString.length > 0) {
       await client.query(

@@ -60,56 +60,57 @@ async function getRoutineActivityById(routineActivityId) {
   }
 }
 
-// async function updateRoutineActivity(id, fields) {
-//   const setString = Object.keys(fields)
-//     .map((key, index) => `"${key}"=$${index + 1}`)
-//     .join(", ");
-//   try {
-//     if (setString.length > 0) {
-//       await client.query(
-//         `
-//         UPDATE routine_activities
-//         SET ${setString}
-//         WHERE id=${id}
-//         RETURNING *;
-//       `,
-//         Object.values(fields)
-//       );
-//     }
-//     return await getRoutineActivityById(id);
-//   } catch (error) {
-//     throw error;
-//   }
-// }
-
 async function updateRoutineActivity(id, fields) {
+  const setString = Object.keys(fields)
+    .map((key, index) => `"${key}"=$${index + 1}`)
+    .join(", ");
   try {
-    const toUpdate = {};
-    for (let column in fields) {
-      if (fields[column] !== undefined) toUpdate[column] = fields[column];
-    }
-    let routineActivity;
-    if (dbFields(fields).insert.length > 0) {
-      console.log(dbFields(toUpdate).insert);
-      console.log("Testing123", Object.values(toUpdate));
-      console.log(id);
-      const { rows } = await client.query(
+    if (setString.length > 0) {
+      // console.log("test", id);
+      await client.query(
         `
         UPDATE routine_activities
-        SET ${dbFields(toUpdate).insert}
-        WHERE id = ${id}
+        SET ${setString}
+        WHERE id=${id}
         RETURNING *;
       `,
-        Object.values(toUpdate)
+        Object.values(fields)
       );
-      console.log("Testing", rows);
-      routineActivity = rows[0];
-      return routineActivity;
     }
+    return await getRoutineActivityById(id);
   } catch (error) {
     throw error;
   }
 }
+
+// async function updateRoutineActivity(id, fields) {
+//   try {
+//     const toUpdate = {};
+//     for (let column in fields) {
+//       if (fields[column] !== undefined) toUpdate[column] = fields[column];
+//     }
+//     let routineActivity;
+//     if (dbFields(fields).insert.length > 0) {
+//       console.log(dbFields(toUpdate).insert);
+//       console.log("Testing123", Object.values(toUpdate));
+//       console.log("test id", id);
+//       const { rows } = await client.query(
+//         `
+//         UPDATE routine_activities
+//         SET ${dbFields(toUpdate).insert}
+//         WHERE id = ${id}
+//         RETURNING *;
+//       `,
+//         Object.values(toUpdate)
+//       );
+//       console.log("Testing", rows);
+//       routineActivity = rows[0];
+//       return routineActivity;
+//     }
+//   } catch (error) {
+//     throw error;
+//   }
+// }
 
 async function destroyRoutineActivity(routineActivityId) {
   try {

@@ -5,7 +5,7 @@ const {
   createRoutine,
   updateRoutine,
   destroyRoutine,
-} = require("../db");
+} = require("../db/routines");
 const { requireUser } = require("./utils");
 
 routinesRouter.get("/", async (req, res, next) => {
@@ -34,9 +34,10 @@ routinesRouter.post("/", requireUser, async (req, res, next) => {
 
 routinesRouter.patch("/:routineId", requireUser, async (req, res, next) => {
   try {
+    const { routineId } = req.params;
     const { name, goal, isPublic } = req.body;
     const fields = { name, goal, isPublic };
-    const routine = await updateRoutine({ id: req.params.routineId, fields });
+    const routine = await updateRoutine({ id: routineId, fields });
     res.send(routine);
   } catch (error) {
     next(error);
