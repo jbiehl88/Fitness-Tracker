@@ -45,7 +45,10 @@ activitiesRouter.patch("/:activityId", requireUser, async (req, res, next) => {
   }
 
   try {
-    const updatedActivity = await updateActivity(activityId, updateFields);
+    const updatedActivity = await updateActivity({
+      id: activityId,
+      ...updateFields,
+    });
     res.send(updatedActivity);
   } catch (error) {
     next(error);

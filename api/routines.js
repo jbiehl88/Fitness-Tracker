@@ -40,7 +40,7 @@ routinesRouter.patch("/:routineId", requireUser, async (req, res, next) => {
     const { routineId } = req.params;
     const { name, goal, isPublic } = req.body;
     const fields = { name, goal, isPublic };
-    const routine = await updateRoutine({ id: routineId, fields });
+    const routine = await updateRoutine({ id: routineId, ...fields });
     res.send(routine);
   } catch (error) {
     next(error);
@@ -70,7 +70,11 @@ routinesRouter.post(
         duration,
         count,
       });
-      res.send(routine);
+      if (!routine) {
+        next();
+      } else {
+        res.send(routine);
+      }
     } catch (error) {
       next(error);
     }

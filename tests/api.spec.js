@@ -121,7 +121,7 @@ describe("API", () => {
         expect(parsedToken.username).toEqual(registeredUser.username);
       });
     });
-    xdescribe("GET /users/me", () => {
+    describe("GET /users/me", () => {
       it("sends back users data if valid token is supplied in header", async () => {
         const { data } = await axios.get(`${API_URL}/api/users/me`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -140,7 +140,7 @@ describe("API", () => {
         expect(noTokenErrResp.data).toBeTruthy();
       });
     });
-    xdescribe("GET /users/:username/routines", () => {
+    describe("GET /users/:username/routines", () => {
       it("Gets a list of public routines for a particular user.", async () => {
         const userId = 2;
         const userWithRoutines = await getUserById(userId);
@@ -317,7 +317,7 @@ describe("API", () => {
         );
         routineActivityToCreateAndUpdate = respondedRoutineActivity;
       });
-      xit("Prevents duplication on (routineId, activityId) pair.", async () => {
+      it("Prevents duplication on (routineId, activityId) pair.", async () => {
         let duplicateIds, duplicateIdsResp;
         try {
           duplicateIds = await axios.post(
@@ -328,7 +328,6 @@ describe("API", () => {
         } catch (err) {
           duplicateIdsResp = err.response;
         }
-        console.log("Jordan", duplicateIdsResp);
         expect(duplicateIds).toBeFalsy();
         expect(duplicateIdsResp.data).toBeTruthy();
       });
@@ -343,14 +342,11 @@ describe("API", () => {
     };
     describe("PATCH /routine_activities/:routineActivityId (**)", () => {
       it("Updates the count or duration on the routine activity", async () => {
-        console.log("hello", routineActivityToCreateAndUpdate);
         const { data: respondedRoutineActivity } = await axios.patch(
           `${API_URL}/api/routine_activities/${routineActivityToCreateAndUpdate.id}`,
           newRoutineActivityData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-
-        console.log("Pawan", respondedRoutineActivity);
         expect(respondedRoutineActivity.count).toEqual(
           newRoutineActivityData.count
         );
