@@ -15,10 +15,9 @@ routine_activitiesRouter.patch(
   async (req, res, next) => {
     const { routineActivityId } = req.params;
 
-    // console.log("ID tester", routineActivityId);
     const { count, duration } = req.body;
 
-    const updateFields = {};
+    const updateFields = { id: routineActivityId };
 
     if (count) {
       updateFields.count = count;
@@ -28,24 +27,14 @@ routine_activitiesRouter.patch(
     }
 
     try {
-      // console.log("Jordan!!!!!", updateFields);
       const rAQuery = await getRoutineActivityById(routineActivityId);
       const routineQuery = await getRoutineById(rAQuery.routineId);
-      console.log("rAQuery", rAQuery);
-      console.log("routineQuery", routineQuery);
-      console.log(req.user);
-      if (routineQuery.creatorId !== req.user.id) {
+      if (routineQuery.creatorId === req.user.id) {
+        const updatedRA = await updateRoutineActivity(updateFields);
+        res.send(updatedRA);
+      } else {
         next();
       }
-      const updatedRA = await updateRoutineActivity(
-        routineActivityId,
-        updateFields
-      );
-      // if (!updatedRA) {
-      //   next();
-      // } else {
-      res.send(updatedRA);
-      // }
     } catch (error) {
       next(error);
     }
@@ -57,15 +46,18 @@ routine_activitiesRouter.delete(
   "/:routineActivityId",
   requireUser,
   async (req, res, next) => {
+    const { routineActivityId } = req.params;
     try {
       const rAQuery = await getRoutineActivityById(routineActivityId);
       const routineQuery = await getRoutineById(rAQuery.routineId);
-      if (routineQuery.creatorId !== req.user.id) {
+      if (routineQuery.creatorId === req.user.id) {
+        // console.log("RA TO DELETE ", routineActivityId);
+        const destroyed = await destroyRoutineActivity(routineActivityId);
+        // console.log("RA DELETED ", destroyed);
+        res.send(destroyed);
+      } else {
         next();
       }
-      const { routineActivityId } = req.params;
-      const destroyed = await destroyRoutineActivity(routineActivityId);
-      res.send(destroyed);
     } catch (error) {
       next(error);
     }

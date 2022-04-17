@@ -137,7 +137,7 @@ async function getPublicRoutinesByActivity(activity) {
   }
 }
 
-async function updateRoutine({ id, fields }) {
+async function updateRoutine({ id, ...fields }) {
   const setString = Object.keys(fields)
     .map((key, index) => `"${key}"=$${index + 1}`)
     .join(", ");
@@ -161,8 +161,6 @@ async function updateRoutine({ id, fields }) {
 
 async function destroyRoutine(routineId) {
   try {
-    console.log(routineId);
-
     await client.query(
       `
     DELETE FROM routine_activities

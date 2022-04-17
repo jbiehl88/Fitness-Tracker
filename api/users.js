@@ -1,8 +1,10 @@
 const express = require("express");
+const { requireUser } = require("./utils");
 const {
   getUserByUserName,
   createUser,
   getPublicRoutinesByUser,
+  getUserById,
 } = require("../db");
 const jwt = require("jsonwebtoken");
 const usersRouter = express.Router();
@@ -79,14 +81,22 @@ usersRouter.post("/login", async (req, res, next) => {
   }
 });
 
+usersRouter.get("/me", requireUser, async (req, res, next) => {
+  try {
+    const user = await getUserById(req.user.id);
+
+    res.send(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
 usersRouter.get("/:username/routines", async (req, res, next) => {
   try {
-    const routines = await getPublicRoutinesByUser(
-      req.params.username,
-      req.body
-    );
+    const { username } = req.params;
+    const routines = await getPublicRoutinesByUser({ username });
 
-    res.send({ routines });
+    res.send(routines);
   } catch (error) {
     next(error);
   }
