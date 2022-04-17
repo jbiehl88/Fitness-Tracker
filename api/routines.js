@@ -70,7 +70,11 @@ routinesRouter.post(
         duration,
         count,
       });
-      res.send(routine);
+      if (!routine) {
+        next();
+      } else {
+        res.send(routine);
+      }
     } catch (error) {
       next(error);
     }

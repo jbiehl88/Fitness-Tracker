@@ -20,9 +20,7 @@ async function addActivityToRoutine({
         `,
       [routineId, activityId, duration, count]
     );
-    if (!routineActivity) {
-      return null;
-    }
+
     return routineActivity;
   } catch (error) {
     throw error;
@@ -57,6 +55,7 @@ async function getRoutineActivityById(routineActivityId) {
       `,
       [routineActivityId]
     );
+
     return routineActivity;
   } catch (error) {
     throw error;
@@ -67,20 +66,23 @@ async function updateRoutineActivity(id, fields) {
   const setString = Object.keys(fields)
     .map((key, index) => `"${key}"=$${index + 1}`)
     .join(", ");
+  if (setString.length === 0) {
+    return;
+  }
   try {
-    if (setString.length > 0) {
-      // console.log("test", id);
-      await client.query(
-        `
-        UPDATE routine_activities
-        SET ${setString}
-        WHERE id=${id}
-        RETURNING *;
-      `,
-        Object.values(fields)
-      );
-    }
-    return await getRoutineActivityById(id);
+    const {
+      rows: [routineActivity],
+    } = await client.query(
+      `
+          UPDATE routine_activities
+          SET ${setString}
+          WHERE id=${id}
+          RETURNING *;
+          `,
+      Object.values(fields)
+    );
+    return routineActivity;
+    // return await getRoutineActivityById(id);
   } catch (error) {
     throw error;
   }
@@ -121,10 +123,10 @@ async function destroyRoutineActivity(routineActivityId) {
       rows: [routineActivity],
     } = await client.query(
       `
-    DELETE FROM routine_activities
-    WHERE id = $1
-    RETURNING *;
-    `,
+      DELETE FROM routine_activities
+      WHERE id = $1
+      RETURNING *;
+      `,
       [routineActivityId]
     );
     return routineActivity;
